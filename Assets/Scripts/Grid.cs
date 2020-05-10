@@ -9,7 +9,7 @@ public class Grid : MonoBehaviour {
 	public Vector3 gridWorldSize;
 	public float nodeRadius;
 	private Node[,,] _grid;
-
+	public List<Node> path;
 	private float _nodeDiameter;
 	private int _gridSizeX, _gridSizeY, _gridSizeZ;
 
@@ -86,9 +86,9 @@ public class Grid : MonoBehaviour {
 	
 
 	public Node getNodeFromPos(Vector3 worldPosition) {
-		float percentX = (worldPosition.x + gridWorldSize.x/2) / gridWorldSize.x;
-		float percentY = (worldPosition.y + gridWorldSize.y/2) / gridWorldSize.y;
-		float percentZ = (worldPosition.z + gridWorldSize.z/2) / gridWorldSize.z;
+		float percentX = (worldPosition.x/ gridWorldSize.x + 1/2);
+		float percentY = (worldPosition.y/ gridWorldSize.y + 1/2);
+		float percentZ = (worldPosition.z/ gridWorldSize.z + 1/2);
 		percentX = Mathf.Clamp01(percentX);
 		percentY = Mathf.Clamp01(percentY);
 		percentZ = Mathf.Clamp01(percentZ);
@@ -98,7 +98,7 @@ public class Grid : MonoBehaviour {
 		return _grid[x,y,z];
 	}
 
-	public List<Node> path;
+	
 	void OnDrawGizmos() {
 		Gizmos.DrawWireCube(transform.position,
 			new Vector3(gridWorldSize.x,gridWorldSize.y,gridWorldSize.z));
