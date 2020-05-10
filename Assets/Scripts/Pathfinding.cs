@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Priority_Queue;
 
 public class Pathfinding : MonoBehaviour {
 
@@ -46,24 +47,24 @@ public class Pathfinding : MonoBehaviour {
 	}
 
 	Vector3[] FindPath(Vector3 startPos, Vector3 targetPos) {
-
+		
 		Vector3[] path = new Vector3[0];
 		bool pathFound = false;
+		int queueCount = 0;
 		
 		Node startNode = grid.getNodeFromPos(startPos);
 		Node targetNode = grid.getNodeFromPos(targetPos);
 
-		Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
-		// Heap openSet = new Heap(grid.MaxSize);
-		HashSet<Node> closedSet = new HashSet<Node>();
-		openSet.Add(startNode);
-
-		while (openSet.Count > 0)
+		SimplePriorityQueue<Node> fringe = new SimplePriorityQueue<Node>();
+		HashSet<Node> visited = new HashSet<Node>();
+		fringe.Enqueue(startNode,(float)(0 + GetDistance(startNode,targetNode)));
+		
+		while (fringe.Count > 0)
 		{
-			Node currentNode = openSet.RemoveFirst();
-			closedSet.Add(currentNode);
+			Node currentNode = fringe.Dequeue();
+			visited.Add(currentNode);
 
-			if (currentNode == targetNode)
+			if (Equals(currentNode , targetNode))
 			{
 				pathFound = true;
 				break;
@@ -71,20 +72,19 @@ public class Pathfinding : MonoBehaviour {
 
 			foreach (Node neighbour in grid.GetNeighbours(currentNode))
 			{
-				if (!neighbour.walkable || closedSet.Contains(neighbour))
+				if (!neighbour.walkable || visited.Contains(neighbour))
 				{
 					continue;
 				}
 
-				double newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-				if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+				double neighbour_gcost = currentNode.gCost + GetDistance(currentNode, neighbour);
+				// if (neighbour_gcost < neighbour.gCost || !fringe.Contains(neighbour))
+				if (!fringe.Contains(neighbour))
 				{
-					neighbour.gCost = newMovementCostToNeighbour;
+					neighbour.gCost = neighbour_gcost;
 					neighbour.hCost = GetDistance(neighbour, targetNode);
 					neighbour.parent = currentNode;
-
-					if (!openSet.Contains(neighbour))
-						openSet.Add(neighbour);
+					fringe.Enqueue(neighbour,(float)neighbour.fCost);
 				}
 			}
 		}
@@ -124,9 +124,6 @@ public class Pathfinding : MonoBehaviour {
 		return waypoints.ToArray();
 	}
 	double GetDistance(Node nodeA, Node nodeB) {
-		// int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
-		// int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
-		// int dstZ = Mathf.Abs(nodeA.gridZ - nodeB.gridZ);
 		return (Math.Sqrt(Math.Pow(nodeA.gridX - nodeB.gridX,2) + Math.Pow(nodeA.gridY - nodeB.gridY,2) 
 		                                                        + Math.Pow(nodeA.gridZ - nodeB.gridZ,2)));
 	}
