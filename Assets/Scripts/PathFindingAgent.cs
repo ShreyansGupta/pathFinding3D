@@ -7,7 +7,8 @@ public class PathFindingAgent : MonoBehaviour {
 	
 	public GameObject finderGameObject;
 	public Transform target;
-
+	public Dictionary<GameObject,Vector3> perceivedNeighbors = new Dictionary<GameObject,Vector3>();
+	
 	private Astar astar;
 	private Grid grid;
 	void Start()
@@ -19,8 +20,8 @@ public class PathFindingAgent : MonoBehaviour {
 	public Vector3[] GetPath()
 	{
 		return astar.FindPath(transform.position, target.position);
-	}	
-	
+	}
+
 	// private void OnDrawGizmos()
 	// {
 	// 	if (grid != null)
@@ -31,5 +32,23 @@ public class PathFindingAgent : MonoBehaviour {
 	// 		Gizmos.DrawWireCube(transform.position,100*Vector3.one);
 	// 	}
 	// }
-	
+
+	public void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.tag == "SideWall")
+		{
+			//Debug.Log(other.gameObject.name);
+			Vector3 poc=other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+			perceivedNeighbors.Add(other.gameObject, poc);
+		}
+	}
+
+	public void OnTriggerExit(Collider other)
+	{
+		if (perceivedNeighbors.ContainsKey(other.gameObject))
+		{
+			perceivedNeighbors.Remove(other.gameObject);
+		}
+	}
+
 }
