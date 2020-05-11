@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class Node  {
@@ -12,16 +13,20 @@ public class Node  {
     public double hCost;
     public Node parent;
 	
-    public Node(bool _walkable, Vector3 _worldPos, int _gridX, int _gridY, int _gridZ) {
-        walkable = _walkable;
-        worldPosition = _worldPos;
-        gridX = _gridX;
-        gridY = _gridY;
-        gridZ = _gridZ;
+    public Node(bool walkable, Vector3 worldPos, int gridX, int gridY, int gridZ) {
+        this.walkable = walkable;
+        this.worldPosition = worldPos;
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.gridZ = gridZ;
     }
     public double fCost {
         get {
             return gCost + hCost;
         }
+    }
+    public double GetDistance(Node other) {
+        return (Math.Sqrt(Math.Pow(this.gridX - other.gridX,2) + Math.Pow(this.gridY - other.gridY,2) 
+                                                                                                   + Math.Pow(this.gridZ - other.gridZ,2)));
     }
 }

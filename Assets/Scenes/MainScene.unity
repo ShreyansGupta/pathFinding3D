@@ -675,7 +675,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1207548933}
   destination: {fileID: 84033763}
-  moveSpeed: 20
+  moveSpeed: 200
 --- !u!1 &456564605
 GameObject:
   m_ObjectHideFlags: 0
@@ -2377,11 +2377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eecb8e529f7c886ddad19a7309015e0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 84033763}
-  speed: 200
-  path: []
-  targetIndex: 0
-  prevTarget: {x: 0, y: 0, z: 0}
 --- !u!1 &1327577862
 GameObject:
   m_ObjectHideFlags: 0
