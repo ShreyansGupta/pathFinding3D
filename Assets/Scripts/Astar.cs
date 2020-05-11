@@ -40,7 +40,7 @@ public class Astar : MonoBehaviour {
 		}
 	}
 
-	private Vector3[] FindPath(Vector3 startPos, Vector3 targetPos) {
+	public Vector3[] FindPath(Vector3 startPos, Vector3 targetPos) {
 		var path = new Vector3[0];
 		var pathFound = false;
 		var startNode = _grid.getNodeFromPos(startPos);
