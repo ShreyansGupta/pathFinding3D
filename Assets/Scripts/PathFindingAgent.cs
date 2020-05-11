@@ -21,15 +21,15 @@ public class PathFindingAgent : MonoBehaviour {
 		return astar.FindPath(transform.position, target.position);
 	}	
 	
-	private void OnDrawGizmos()
-	{
-		if (grid != null)
-		{
-			// Debug.Log("seeker: "+agent.position);
-			Node s = grid.getNodeFromPos(transform.position);
-			Gizmos.DrawWireCube(s.worldPosition,100*Vector3.one);
-			Gizmos.DrawWireCube(transform.position,100*Vector3.one);
-		}
-	}
+	// private void OnDrawGizmos()
+	// {
+	// 	if (grid != null)
+	// 	{
+	// 		// Debug.Log("seeker: "+agent.position);
+	// 		Node s = grid.getNodeFromPos(transform.position);
+	// 		Gizmos.DrawWireCube(s.worldPosition,100*Vector3.one);
+	// 		Gizmos.DrawWireCube(transform.position,100*Vector3.one);
+	// 	}
+	// }
 	
 }

@@ -8,9 +8,9 @@ public class FollowCam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var newPos = transform.position - transform.forward * 20 + transform.up * 10;
+        var newPos = transform.position - transform.forward * 15 + transform.up * 7;
         Camera.main.transform.position = damping * Camera.main.transform.position + (1 - damping) * newPos; 
         
-        Camera.main.transform.LookAt(transform.position + transform.forward * 25);
+        Camera.main.transform.LookAt(transform.position + transform.forward * 10);
     }
 }

@@ -613,10 +613,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 934356364}
     m_Modifications:
-    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
-      propertyPath: m_Name
-      value: coin_gold_reflex_test (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 420448, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 415
@@ -672,6 +668,10 @@ PrefabInstance:
     - target: {fileID: 420448, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
       propertyPath: m_LocalScale.x
       value: 175.3431
+      objectReference: {fileID: 0}
+    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
+      propertyPath: m_Name
+      value: coin_gold_reflex_test (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
@@ -769,7 +769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c221a89c2743f4f586d7b26f091885d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawPath: 0
+  drawPath: 1
   drawGrid: 0
   unwalkableMask:
     serializedVersion: 2
@@ -848,10 +848,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 934356364}
     m_Modifications:
-    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
-      propertyPath: m_Name
-      value: coin_gold_reflex_test (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 420448, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 866
@@ -907,6 +903,10 @@ PrefabInstance:
     - target: {fileID: 420448, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
       propertyPath: m_LocalScale.x
       value: 175.3431
+      objectReference: {fileID: 0}
+    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
+      propertyPath: m_Name
+      value: coin_gold_reflex_test (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
@@ -2537,9 +2537,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
+      propertyPath: m_Lift
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
+      propertyPath: m_ZeroLiftSpeed
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
+      propertyPath: m_YawEffect
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
+      propertyPath: m_BankedTurnEffect
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: 147d826ca4c5a834a9dfe5db390c47f4, type: 3}
       propertyPath: m_Enabled
@@ -2602,7 +2630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae00d71772c42412ab455ce036650f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damping: 0.95
+  damping: 0.96
 --- !u!114 &1114830245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2616,7 +2644,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxPitchAgnleInDeg: 45
-  maxRollAngleInDeg: 45
+  maxRollAngleInDeg: 55
+  speedEffect: 0.75
+  rollSensitivity: 0.65
+  pitchSensitivity: 0.65
+  takeOffHeight: 10
+  maxVelocity: 200
   _takenOff: 0
 --- !u!114 &1114830246
 MonoBehaviour:
@@ -3494,10 +3527,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 934356364}
     m_Modifications:
-    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
-      propertyPath: m_Name
-      value: coin_gold_reflex_test (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 420448, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1318
@@ -3554,6 +3583,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 175.3431
       objectReference: {fileID: 0}
+    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
+      propertyPath: m_Name
+      value: coin_gold_reflex_test (2)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
 --- !u!4 &1633018356
@@ -3594,10 +3627,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 934356364}
     m_Modifications:
-    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
-      propertyPath: m_Name
-      value: coin_gold_reflex_test (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 420448, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -43
@@ -3653,6 +3682,10 @@ PrefabInstance:
     - target: {fileID: 420448, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
       propertyPath: m_LocalScale.x
       value: 175.3431
+      objectReference: {fileID: 0}
+    - target: {fileID: 113244, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}
+      propertyPath: m_Name
+      value: coin_gold_reflex_test (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7f49308c32ea42ebb84ace455f0d7c7, type: 3}

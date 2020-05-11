@@ -14,15 +14,15 @@ public class Astar : MonoBehaviour {
 		_grid = GetComponent<Grid>();
 	}
 
-	private void Update() {
-		var path = FindPath(agent.position,destination.position);
-		if (path != new Vector3[0])
-		{
-			object[] parms= {path,agent.gameObject};
-			StartCoroutine(nameof(MoveAgent),parms);
-		}
-		StopCoroutine(nameof(MoveAgent));
-	}
+	// private void Update() {
+	// 	var path = FindPath(agent.position,destination.position);
+	// 	if (path != new Vector3[0])
+	// 	{
+	// 		object[] parms= {path,agent.gameObject};
+	// 		StartCoroutine(nameof(MoveAgent),parms);
+	// 	}
+	// 	StopCoroutine(nameof(MoveAgent));
+	// }
 
 	private IEnumerator MoveAgent(object[] parms) {
 		var path = (Vector3[])parms[0];
