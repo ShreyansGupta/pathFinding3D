@@ -5,7 +5,7 @@ using UnityEngine;
 public class SocialForces : MonoBehaviour
 {
     private Rigidbody rb;
-    public float perceptionRadius;
+    private float perceptionRadius;
     private PathFindingAgent pathFinding;
     // Start is called before the first frame update
     void Start()
@@ -53,7 +53,7 @@ public class SocialForces : MonoBehaviour
         var projection = Vector3.Project(dir, normal);
 
         var exponent = Mathf.Exp(((perceptionRadius + 0.5f) - projection.magnitude) / 100f);
-        wallForce += (2000f * exponent) * normal*100;
+        wallForce += (2000f * exponent) * normal*50;
         //Debug.Log("Force" + wallForce.magnitude);
 
         return wallForce;

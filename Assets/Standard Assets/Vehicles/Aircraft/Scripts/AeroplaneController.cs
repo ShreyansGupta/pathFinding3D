@@ -11,8 +11,8 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
         [SerializeField] private float m_ZeroLiftSpeed = 300;         // The speed at which lift is no longer applied.
         [SerializeField] private float m_RollEffect = 1f;             // The strength of effect for roll input.
         [SerializeField] private float m_PitchEffect = 1f;            // The strength of effect for pitch input.
-        [SerializeField] private float m_YawEffect = 0.75f;            // The strength of effect for yaw input.
-        [SerializeField] private float m_BankedTurnEffect = 0.65f;     // The amount of turn from doing a banked turn.
+        [SerializeField] private float m_YawEffect = 0.2f;            // The strength of effect for yaw input.
+        [SerializeField] private float m_BankedTurnEffect = 0.5f;     // The amount of turn from doing a banked turn.
         [SerializeField] private float m_AerodynamicEffect = 0.02f;   // How much aerodynamics affect the speed of the aeroplane.
         [SerializeField] private float m_AutoTurnPitch = 0.5f;        // How much the aeroplane automatically pitches when in a banked turn.
         [SerializeField] private float m_AutoRollLevel = 0.2f;        // How much the aeroplane tries to level when not rolling.
@@ -231,10 +231,10 @@ namespace UnityStandardAssets.Vehicles.Aeroplane
         {
             // We accumulate torque forces into this variable:
             var torque = Vector3.zero;
-            // Add torque for the pitch based on the pitch input.
-            torque += PitchInput*m_PitchEffect*transform.right;
             // Add torque for the yaw based on the yaw input.
             torque += YawInput*m_YawEffect*transform.up;
+            // Add torque for the pitch based on the pitch input.
+            torque += PitchInput*m_PitchEffect*transform.right;
             // Add torque for the roll based on the roll input.
             torque += -RollInput*m_RollEffect*transform.forward;
             // Add torque for banked turning.
