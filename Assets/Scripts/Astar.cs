@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,14 +59,17 @@ public class Astar : MonoBehaviour {
 				pathFound = true;
 				break;
 			}
-			foreach (var neighbour in _grid.GetNeighbours(currentNode)
-				.Where(neighbour => neighbour.walkable && !visited.Contains(neighbour))
-				.Where(neighbour => !fringe.Contains(neighbour)))
+			foreach (var neighbour in _grid.GetNeighbours(currentNode))
+				// .Where(neighbour => neighbour.walkable && !visited.Contains(neighbour))
+				// .Where(neighbour => !fringe.Contains(neighbour)))
 			{
-				neighbour.gCost = currentNode.gCost + currentNode.GetDistance( neighbour);
-				neighbour.hCost = neighbour.GetDistance(targetNode);
-				neighbour.parent = currentNode;
-				fringe.Enqueue(neighbour,(float)neighbour.fCost);
+				if ( neighbour.walkable && !visited.Contains(neighbour) && !fringe.Contains(neighbour) )
+				{
+					neighbour.gCost = currentNode.gCost + currentNode.GetDistance( neighbour);
+					neighbour.hCost = neighbour.GetDistance(targetNode);
+					neighbour.parent = currentNode;
+					fringe.Enqueue(neighbour,(float)neighbour.fCost);
+				}
 			}
 		}
 
@@ -94,5 +98,8 @@ public class Astar : MonoBehaviour {
 		return path.ToArray();
 	}
 
-	
+	private void OnDrawGizmos()
+	{
+		
+	}
 }

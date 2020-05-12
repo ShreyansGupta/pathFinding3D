@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Grid : MonoBehaviour {
@@ -11,8 +12,10 @@ public class Grid : MonoBehaviour {
 	private Node[,,] _grid;
 	public List<Node> path;
 	private float _nodeDiameter;
-	private int _gridSizeX, _gridSizeY, _gridSizeZ;
+	public int _gridSizeX, _gridSizeY, _gridSizeZ;
 
+	private int noFreeSpace = 1;
+	private HashSet<Tuple<int, int, int>> extraUnwalkable = new HashSet<Tuple<int, int, int>>();
 	void Start() {
 		_nodeDiameter = nodeRadius*2;
 		_gridSizeX = Mathf.RoundToInt(gridWorldSize.x/_nodeDiameter);
@@ -33,16 +36,40 @@ public class Grid : MonoBehaviour {
 		                          - Vector3.forward * gridWorldSize.z/2;
 		
 		for (int x = 0; x < _gridSizeX; x ++) {
-			for (int y = 0; y < _gridSizeY; y ++) {
-				for(int z=0;z < _gridSizeZ; z++ ) {
+			for (int y = 0; y < _gridSizeY; y++) {
+				for(int z=0; z < _gridSizeZ; z++) {
 					Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * _nodeDiameter + nodeRadius) + 
 					                     Vector3.up * (y * _nodeDiameter + nodeRadius) + 
 					                     Vector3.forward * (z * _nodeDiameter + nodeRadius);
 					
-					bool walkable = !(Physics.CheckSphere(worldPoint,nodeRadius,unwalkableMask));
+					bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
 					_grid[x,y,z] = new Node(walkable,worldPoint,x,y,z);
+					// mark all neighbors as extraFreeUnwalkaleSpace
+					if (!walkable) {
+						for (int i = -noFreeSpace; i <= noFreeSpace; i++) 
+						{
+							for (int j = -noFreeSpace; j <= noFreeSpace; j++)
+							{
+								for (int k = -noFreeSpace; k <= noFreeSpace; k++)
+								{
+									if (i==0 && j==0 && k==0) continue;
+									if ((x + i >= 0 && x + i < _gridSizeX) &&
+									    (y + j >= 0 && y + j < _gridSizeY) &&
+									    (z + k >= 0 && z + k < _gridSizeZ))
+									{
+										extraUnwalkable.Add(Tuple.Create(x+i, y+j, z+k));
+									}
+								}
+							}
+						}
+					}
 				}
 			}
+		}
+		// mark all extra unwalkable white space
+		foreach(var t in extraUnwalkable)
+		{
+			_grid[t.Item1, t.Item2, t.Item3].walkable = false;
 		}
 	}
 
@@ -88,7 +115,7 @@ public class Grid : MonoBehaviour {
 
 	public Node getNodeFromPos(Vector3 worldPosition) {
 		float percentX = (worldPosition.x + gridWorldSize.x/2) / gridWorldSize.x;
-		float percentY = (worldPosition.y + gridWorldSize.y/2) / gridWorldSize.y;
+		float percentY = (worldPosition.y) / gridWorldSize.y;
 		float percentZ = (worldPosition.z + gridWorldSize.z/2) / gridWorldSize.z;
 		percentX = Mathf.Clamp01(percentX);
 		percentY = Mathf.Clamp01(percentY);
