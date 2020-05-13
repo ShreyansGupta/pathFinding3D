@@ -10,25 +10,22 @@ public class AIController : MonoBehaviour
 
     [SerializeField] private float m_RollSensitivity = .2f;         // How sensitively the AI applies the roll controls
     [SerializeField] private float m_PitchSensitivity = .5f;        // How sensitively the AI applies the pitch controls
-    [SerializeField] private float m_LateralWanderDistance = 5;     // The amount that the plane can wander by when heading for a target
-    [SerializeField] private float m_LateralWanderSpeed = 0.11f;    // The speed at which the plane will wander laterally
     [SerializeField] private float m_MaxClimbAngle = 45;            // The maximum angle that the AI will attempt to make plane can climb at
     [SerializeField] private float m_MaxRollAngle = 45;             // The maximum angle that the AI will attempt to u
     [SerializeField] private float m_SpeedEffect = 0.01f;           // This increases the effect of the controls based on the plane's speed.
     [SerializeField] private float m_TakeoffHeight = 20;            // the AI will fly straight and only pitch upwards until reaching this height
-    public bool drawPath = false;
-    
+    [SerializeField] private float distanceThreshold = 120.0f;
+    [SerializeField] private bool drawPath = false;
+
     private AeroplaneController m_Controller;
     private PathFindingAgent m_NavAgent;
 
     private Vector3[] m_Path;
+    private Rigidbody m_Rigidbody;
+
+    private bool _takenOff;
     private Vector3 _startingPos;
     private float _prevPointDistance = Mathf.Infinity;
-    private Rigidbody m_Rigidbody;
-    
-    private bool _takenOff;
-    private float distanceThreshold = 120.0f;
-    
     
     void Start()
     {
@@ -46,28 +43,24 @@ public class AIController : MonoBehaviour
         {
             // apply full throttle for takeoff
             m_Controller.Move(0,0,0, 1, false);
-            if (m_Controller.Altitude > m_TakeoffHeight )
+            if (m_Controller.Altitude > m_TakeoffHeight && m_NavAgent.grid.checkInWorld(transform.position))
                 //&& m_NavAgent.grid.checkInWorld(transform.position))
             {
                 _takenOff = true;
                 // Get the path to follow using path follower
 
-                /*m_Path = m_NavAgent.GetPath();
-                if (m_Path.Length > 0)
-                {
-                    print("Path Found");
-                    OnPathFound(m_Path, true);
-                }
-                else
-                    print("No Path Found");
-*/
-
+                // m_Path = m_NavAgent.GetPath();
+                // if (m_Path.Length > 0)
+                // {
+                //     print("Path Found");
+                //     OnPathFound(m_Path, true);
+                // }
+                // else
+                //     print("No Path Found");
               PathRequestManager.RequestPath(transform.position + transform.forward * 50 + transform.up * 20, m_NavAgent.target.position, OnPathFound);
-
             }
         }
 
-        
         // Clamp the speed to maxSpeed once the plane has taken off
         // Vector3.ClampMagnitude(m_Rigidbody.velocity, maxVelocity);
 
@@ -78,12 +71,12 @@ public class AIController : MonoBehaviour
         if (pathSuccessful)
         {
             m_Path = newPath;
-            //Debug.Log(m_Path.Length);
+            // Do Path smoothing
             m_Path = m_NavAgent.Chaikin(m_Path);
-
             m_Path = movingAverage(m_Path, 10);
-
-            print(m_Path.Length);
+            
+            // print("Path Count: " + m_Path.Length);
+            // start moving the agent
             StartCoroutine(MoveAgent());
         }
         
@@ -143,7 +136,7 @@ public class AIController : MonoBehaviour
         }
         
         // reach final destination point
-        while (currTargetDist < distanceThreshold)
+        while (currTargetDist < distanceThreshold / 3)
         {
             MoveTowards(currTarget);
             yield return new WaitForFixedUpdate();
@@ -197,23 +190,6 @@ public class AIController : MonoBehaviour
     
     #endregion
     
-    private void OnDrawGizmos()
-    {
-        if (drawPath && m_Path != null)
-        {
-            for (int i = 0; i < m_Path.Length-1; i++)
-            {
-                Gizmos.color = Color.grey;
-                Gizmos.DrawWireSphere(m_Path[i], 2);
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(m_Path[i], m_Path[i+1]);
-            }
-        }
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, distanceThreshold);
-    }
-
     Vector3[] movingAverage(Vector3[] path, int window=5)
     {
         Vector3[] newPath = new Vector3[path.Length - window + 1];
@@ -227,5 +203,43 @@ public class AIController : MonoBehaviour
             newPath[i] /= window;
         }
         return  newPath;
+    }
+    
+    private void OnDrawGizmos()
+    {
+        if (drawPath && m_Path != null)
+        {
+            for (int i = 0; i < m_Path.Length-1; i++)
+            {
+                Gizmos.color = Color.grey;
+                Gizmos.DrawWireSphere(m_Path[i], 2);
+                Gizmos.color = m_NavAgent.target.name.Equals("RedTarget") ? Color.red : Color.green;
+                Gizmos.DrawLine(m_Path[i], m_Path[i+1]);
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (m_NavAgent != null && m_Path != null)
+        {
+            var targetName = m_NavAgent.target.name;
+
+            for (int i = 0; i < m_Path.Length-1; i++)
+            {
+                Gizmos.color = Color.grey;
+                Gizmos.DrawWireSphere(m_Path[i], 2);
+                 if (targetName.Equals("RedTarget")) 
+                     Gizmos.color = Color.red;
+                 else if(targetName.Equals("GreenTarget"))
+                     Gizmos.color = Color.green;
+                 else
+                     Gizmos.color = Color.blue;
+                 Gizmos.DrawLine(m_Path[i], m_Path[i+1]);
+            }
+        }
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, 75f);
     }
 }

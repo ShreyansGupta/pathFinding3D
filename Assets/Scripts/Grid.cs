@@ -9,12 +9,14 @@ public class Grid : MonoBehaviour {
 	public LayerMask unwalkableMask;
 	public Vector3 gridWorldSize;
 	public float nodeRadius;
+	
 	private Node[,,] _grid;
 	public List<Node> path;
 	private float _nodeDiameter;
 	public int _gridSizeX, _gridSizeY, _gridSizeZ;
-
-	private int noFreeSpace = 4;
+	public bool bake = false;
+	
+	[SerializeField] private int noFreeSpace = 4;
 	private HashSet<Tuple<int, int, int>> extraUnwalkable = new HashSet<Tuple<int, int, int>>();
 	void Start() {
 		_nodeDiameter = nodeRadius*2;
@@ -22,7 +24,20 @@ public class Grid : MonoBehaviour {
 		_gridSizeY = Mathf.RoundToInt(gridWorldSize.y/_nodeDiameter);
 		_gridSizeZ = Mathf.RoundToInt(gridWorldSize.z/_nodeDiameter);
 		CreateGrid();
+	}
 
+	void OnValidate()
+	{
+		_nodeDiameter = nodeRadius*2;
+		_gridSizeX = Mathf.RoundToInt(gridWorldSize.x/_nodeDiameter);
+		_gridSizeY = Mathf.RoundToInt(gridWorldSize.y/_nodeDiameter);
+		_gridSizeZ = Mathf.RoundToInt(gridWorldSize.z/_nodeDiameter);
+		
+		if (bake)
+		{
+			CreateGrid();
+		}
+		bake = false;
 	}
 	
 
@@ -157,12 +172,15 @@ public class Grid : MonoBehaviour {
 	}
 	public bool checkInWorld(Vector3 loc)
 	{
-		Debug.DrawRay(loc, Vector3.up * 50,Color.magenta);
-		return ((loc.x < gridWorldSize.x / 2 && loc.x > -gridWorldSize.x / 2) &&
+		bool inWorld = ((loc.x < gridWorldSize.x / 2 && loc.x > -gridWorldSize.x / 2) &&
 			(loc.y < gridWorldSize.y && loc.y > 0) &&
 			(loc.z < gridWorldSize.z / 2 && loc.z > -gridWorldSize.z / 2));
+		if (inWorld)
+		{
+			print("Entered World, Can start path finding now");
+		}
 
+		return inWorld;
 
-		
 	}
 }

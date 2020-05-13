@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SocialForces : MonoBehaviour
@@ -17,11 +18,11 @@ public class SocialForces : MonoBehaviour
         perceptionRadius = GetComponent<SphereCollider>().radius;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-      /*  if (perceivedNeighbors.Count != 0)
+       if (perceivedNeighbors.Count != 0)
             computeForce();
-         rayCastForce();*/
+         // rayCastForce();
     }
 
     private void computeForce()
@@ -60,7 +61,7 @@ public class SocialForces : MonoBehaviour
 
         var exponent = Mathf.Exp(((perceptionRadius + 0.5f) - projection.magnitude) / 100f);
         wallForce += (2000f * exponent) * normal * 100;
-        Debug.Log("Force" + wallForce.magnitude);
+        // Debug.Log("Force" + wallForce.magnitude);
 
         return wallForce;
     }
@@ -70,6 +71,12 @@ public class SocialForces : MonoBehaviour
         if (other.gameObject.tag == "SideWall" && !perceivedNeighbors.ContainsKey(other.gameObject))
         {
             //Debug.Log(other.gameObject.name);
+            Vector3 poc = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+            perceivedNeighbors.Add(other.gameObject, poc);
+        }
+
+        if (other.gameObject.tag.Equals("Player") && !perceivedNeighbors.ContainsKey(other.gameObject))
+        {
             Vector3 poc = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
             perceivedNeighbors.Add(other.gameObject, poc);
         }

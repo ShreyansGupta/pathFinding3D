@@ -2,19 +2,28 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Random = System.Random;
 
 public class PathFindingAgent : MonoBehaviour {
 	
-	public GameObject finderGameObject;
-	public Transform target;
 
-	public bool drawGizmo = false;
+	public GameObject finderGameObject;
+	[SerializeField] private bool drawNodeCube = false;
+
+	[HideInInspector] public Transform target = null;
+	[HideInInspector] public Grid grid;
+	
+	private Transform targets;
 	private Astar astar;
-	public Grid grid;
+	
 	void Start()
 	{
-		 astar = finderGameObject.GetComponent<Astar>();
+		targets = GameObject.Find("Targets").transform;
+			astar = finderGameObject.GetComponent<Astar>();
 		 grid = finderGameObject.GetComponent<Grid>();
+		 
+		 target = targets.GetChild(new Random().Next(0, targets.childCount));
+		 // target = targets.GetChild(1);
 
 	}
 	public Vector3[] GetPath()
@@ -104,13 +113,11 @@ public class PathFindingAgent : MonoBehaviour {
 	
     private void OnDrawGizmos()
     {
-	    if (grid != null && drawGizmo)
+	    if (drawNodeCube && grid != null)
 		{
 			var nodeDiameter = 2 * grid.nodeRadius;
-			// Debug.Log("seeker: "+agent.position);
 			Node s = grid.getNodeFromPos(transform.position);
 			Gizmos.DrawWireCube(s.worldPosition,new Vector3(nodeDiameter,nodeDiameter,nodeDiameter));
-			// Gizmos.DrawWireCube(transform.position,100*Vector3.one);
 		}
 	}
 	
