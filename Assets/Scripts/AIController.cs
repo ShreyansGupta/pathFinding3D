@@ -29,6 +29,7 @@ public class AIController : MonoBehaviour
     private bool _takenOff;
     private float distanceThreshold = 120.0f;
     
+    
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -45,26 +46,49 @@ public class AIController : MonoBehaviour
         {
             // apply full throttle for takeoff
             m_Controller.Move(0,0,0, 1, false);
-            if (m_Controller.Altitude > m_TakeoffHeight)
+            if (m_Controller.Altitude > m_TakeoffHeight )
+                //&& m_NavAgent.grid.checkInWorld(transform.position))
             {
                 _takenOff = true;
                 // Get the path to follow using path follower
-                m_Path = m_NavAgent.GetPath();
-                
-                m_Path = m_NavAgent.Chaikin(m_Path);
 
-                m_Path = movingAverage(m_Path, 10);
-                
-                print(m_Path.Length);
-                StartCoroutine(MoveAgent());   
+                /*m_Path = m_NavAgent.GetPath();
+                if (m_Path.Length > 0)
+                {
+                    print("Path Found");
+                    OnPathFound(m_Path, true);
+                }
+                else
+                    print("No Path Found");
+*/
+
+              PathRequestManager.RequestPath(transform.position + transform.forward * 50 + transform.up * 20, m_NavAgent.target.position, OnPathFound);
+
             }
         }
-       
+
+        
         // Clamp the speed to maxSpeed once the plane has taken off
         // Vector3.ClampMagnitude(m_Rigidbody.velocity, maxVelocity);
-     
+
     }
-    
+
+    public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
+    {
+        if (pathSuccessful)
+        {
+            m_Path = newPath;
+            //Debug.Log(m_Path.Length);
+            m_Path = m_NavAgent.Chaikin(m_Path);
+
+            m_Path = movingAverage(m_Path, 10);
+
+            print(m_Path.Length);
+            StartCoroutine(MoveAgent());
+        }
+        
+    }
+
     IEnumerator MoveAgent()
     {
         int i = 0;
@@ -115,7 +139,7 @@ public class AIController : MonoBehaviour
 
             }
             // move on to next point
-            i += 12;
+            i += 20;
         }
         
         // reach final destination point

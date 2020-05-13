@@ -7,6 +7,8 @@ public class SocialForces : MonoBehaviour
     private Rigidbody rb;
     private float perceptionRadius;
     private Dictionary<GameObject, Vector3> perceivedNeighbors = new Dictionary<GameObject, Vector3>();
+    private float rayCastOffset = 10.0f;
+    public float detectionDistance = 100.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,8 +19,9 @@ public class SocialForces : MonoBehaviour
 
     private void Update()
     {
-        if (perceivedNeighbors.Count!=0)
+      /*  if (perceivedNeighbors.Count != 0)
             computeForce();
+         rayCastForce();*/
     }
 
     private void computeForce()
@@ -56,8 +59,8 @@ public class SocialForces : MonoBehaviour
         var projection = Vector3.Project(dir, normal);
 
         var exponent = Mathf.Exp(((perceptionRadius + 0.5f) - projection.magnitude) / 100f);
-        wallForce += (2000f * exponent) * normal * 250;
-        //Debug.Log("Force" + wallForce.magnitude);
+        wallForce += (2000f * exponent) * normal * 100;
+        Debug.Log("Force" + wallForce.magnitude);
 
         return wallForce;
     }
@@ -77,6 +80,31 @@ public class SocialForces : MonoBehaviour
         if (perceivedNeighbors.ContainsKey(other.gameObject))
         {
             perceivedNeighbors.Remove(other.gameObject);
+        }
+    }
+
+    private void rayCastForce()
+    {
+        Vector3 left = transform.position - transform.right * rayCastOffset;
+        Vector3 right = transform.position + transform.right * rayCastOffset;
+        RaycastHit hit;
+        Vector3 move = new Vector3();
+        Debug.DrawRay(left, transform.forward*100, Color.magenta);
+        Debug.DrawRay(right, transform.forward*100, Color.magenta);
+
+        if(Physics.Raycast(left,transform.forward,out hit, detectionDistance))
+        {
+            move += transform.up;
+        }
+        else if (Physics.Raycast(right, transform.forward, out hit, detectionDistance))
+        {
+            move -= transform.up;
+        }
+
+        if (move != Vector3.zero)
+        {
+            transform.Rotate(move * 50f * Time.deltaTime);
+
         }
     }
 

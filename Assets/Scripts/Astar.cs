@@ -44,11 +44,14 @@ public class Astar : MonoBehaviour {
 	public Vector3[] FindPath(Vector3 startPos, Vector3 targetPos) {
 		var path = new Vector3[0];
 		var pathFound = false;
+		//Debug.Log(startPos + " " + targetPos);
 		var startNode = _grid.getNodeFromPos(startPos);
 		var targetNode = _grid.getNodeFromPos(targetPos);
 		var fringe = new SimplePriorityQueue<Node>();
 		var visited = new HashSet<Node>();
-		fringe.Enqueue(startNode,(float)(0 + startNode.GetDistance(targetNode)));
+		startNode.gCost = 0;
+		startNode.hCost = startNode.GetDistance(targetNode);
+		fringe.Enqueue(startNode,(float)(0 + startNode.hCost));
 		
 		while (fringe.Count > 0)
 		{
@@ -63,13 +66,27 @@ public class Astar : MonoBehaviour {
 				// .Where(neighbour => neighbour.walkable && !visited.Contains(neighbour))
 				// .Where(neighbour => !fringe.Contains(neighbour)))
 			{
-				if ( neighbour.walkable && !visited.Contains(neighbour) && !fringe.Contains(neighbour) )
+				if ( neighbour.walkable && !visited.Contains(neighbour))
 				{
-					neighbour.gCost = currentNode.gCost + currentNode.GetDistance( neighbour);
-					neighbour.hCost = neighbour.GetDistance(targetNode);
-					neighbour.parent = currentNode;
-					fringe.Enqueue(neighbour,(float)neighbour.fCost);
+					if (!fringe.Contains(neighbour))
+					{
+						neighbour.gCost = currentNode.gCost + currentNode.GetDistance(neighbour);
+						neighbour.hCost = neighbour.GetDistance(targetNode);
+						neighbour.parent = currentNode;
+						fringe.Enqueue(neighbour, (float)neighbour.fCost);
+					}
+					/*else
+					{
+						var cost = currentNode.gCost + currentNode.GetDistance(neighbour);
+						cost+=neighbour.GetDistance(targetNode);
+						if (cost < neighbour.fCost)
+						{
+							fringe.UpdatePriority(neighbour, (float)cost);
+						}
+					}*/
+					
 				}
+				
 			}
 		}
 

@@ -14,7 +14,7 @@ public class Grid : MonoBehaviour {
 	private float _nodeDiameter;
 	public int _gridSizeX, _gridSizeY, _gridSizeZ;
 
-	private int noFreeSpace = 1;
+	private int noFreeSpace = 4;
 	private HashSet<Tuple<int, int, int>> extraUnwalkable = new HashSet<Tuple<int, int, int>>();
 	void Start() {
 		_nodeDiameter = nodeRadius*2;
@@ -22,7 +22,9 @@ public class Grid : MonoBehaviour {
 		_gridSizeY = Mathf.RoundToInt(gridWorldSize.y/_nodeDiameter);
 		_gridSizeZ = Mathf.RoundToInt(gridWorldSize.z/_nodeDiameter);
 		CreateGrid();
+
 	}
+	
 
 	public int MaxSize {
 		get {
@@ -152,5 +154,15 @@ public class Grid : MonoBehaviour {
 				}
 			}
 		}
+	}
+	public bool checkInWorld(Vector3 loc)
+	{
+		Debug.DrawRay(loc, Vector3.up * 50,Color.magenta);
+		return ((loc.x < gridWorldSize.x / 2 && loc.x > -gridWorldSize.x / 2) &&
+			(loc.y < gridWorldSize.y && loc.y > 0) &&
+			(loc.z < gridWorldSize.z / 2 && loc.z > -gridWorldSize.z / 2));
+
+
+		
 	}
 }

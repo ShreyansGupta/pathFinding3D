@@ -10,7 +10,7 @@ public class PathFindingAgent : MonoBehaviour {
 
 	public bool drawGizmo = false;
 	private Astar astar;
-	private Grid grid;
+	public Grid grid;
 	void Start()
 	{
 		 astar = finderGameObject.GetComponent<Astar>();

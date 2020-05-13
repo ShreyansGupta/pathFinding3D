@@ -26,7 +26,8 @@ public class Node  {
         }
     }
     public double GetDistance(Node other) {
-        return (Math.Sqrt(Math.Pow(this.gridX - other.gridX,2) + Math.Pow(this.gridY - other.gridY,2) 
-                                                                                                   + Math.Pow(this.gridZ - other.gridZ,2)));
+        return (Math.Sqrt(Math.Pow(this.gridX - other.gridX, 2) + Math.Pow(this.gridY - other.gridY, 2)
+                                                                                                   + Math.Pow(this.gridZ - other.gridZ, 2)));
+        // return Math.Abs(this.gridX - other.gridX) + Math.Abs(this.gridY - other.gridY) + Math.Abs(this.gridZ - other.gridZ);
     }
 }
