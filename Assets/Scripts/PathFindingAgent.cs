@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Random = System.Random;
+using UnityEditor;
 
 public class PathFindingAgent : MonoBehaviour {
 	
@@ -119,6 +120,9 @@ public class PathFindingAgent : MonoBehaviour {
 			Node s = grid.getNodeFromPos(transform.position);
 			Gizmos.DrawWireCube(s.worldPosition,new Vector3(nodeDiameter,nodeDiameter,nodeDiameter));
 		}
-	}
+        if (target != null)
+            Handles.Label(transform.position, name + " " + target.name);
+
+    }
 	
 }
