@@ -49,7 +49,7 @@ public class SocialForces : MonoBehaviour
             
             
         }
-        rb.AddForce(force * 5, ForceMode.Force);
+        rb.AddForce(force * 2, ForceMode.Force);
     }
 
     private Vector3 calculateWallForce(GameObject wall)

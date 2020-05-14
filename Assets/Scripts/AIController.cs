@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Aeroplane;
-using UnityEditor;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class AIController : MonoBehaviour
 {
@@ -202,8 +204,11 @@ public class AIController : MonoBehaviour
     
     private void OnDrawGizmos()
     {
+        #if UNITY_EDITOR
         Handles.color = Color.black;
         Handles.Label(transform.position, name);
+        #endif
+        
 
         if (m_NavAgent != null)
         {

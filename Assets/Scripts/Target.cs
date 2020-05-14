@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
-
+#endif
 public class Target : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -21,8 +22,10 @@ public class Target : MonoBehaviour
 
     void OnDrawGizmos() 
     {
-        
+        #if UNITY_EDITOR
         Handles.Label(transform.position, name);
+        #endif
+
     }
     
     
