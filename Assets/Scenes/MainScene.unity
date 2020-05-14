@@ -1095,7 +1095,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 413612988}
-  - component: {fileID: 413612989}
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
@@ -1120,18 +1119,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &413612989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 413612987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af5433e944ddb180b949ad286765bb4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &420388314
 GameObject:
   m_ObjectHideFlags: 0
@@ -3544,6 +3531,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1024515405}
+  - component: {fileID: 1024515406}
   m_Layer: 0
   m_Name: Agents
   m_TagString: Untagged
@@ -3568,6 +3556,19 @@ Transform:
   m_Father: {fileID: 413612988}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1024515406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024515404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af5433e944ddb180b949ad286765bb4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damping: 0.9
 --- !u!1 &1091194368
 GameObject:
   m_ObjectHideFlags: 0

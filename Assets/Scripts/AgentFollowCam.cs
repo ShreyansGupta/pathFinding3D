@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class AgentFollowCam : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    public float damping;
+    
     void Update()
     {
         var name = "";
@@ -53,6 +48,7 @@ public class AgentFollowCam : MonoBehaviour
                 fc.enabled = false;
                 if (fc.gameObject != gameObject && fc.gameObject.name == name)
                 {
+                    fc.damping = damping;
                     fc.enabled = true;
                 }
             }
