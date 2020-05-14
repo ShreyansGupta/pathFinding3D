@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class AgentFollowCam : MonoBehaviour
@@ -46,8 +47,10 @@ public class AgentFollowCam : MonoBehaviour
             foreach (FollowCam fc in GetComponentsInChildren<FollowCam>())
             {
                 fc.enabled = false;
+                fc.GetComponent<AIController>().drawWireSphere = false;
                 if (fc.gameObject != gameObject && fc.gameObject.name == name)
                 {
+                    fc.GetComponent<AIController>().drawWireSphere = true;
                     fc.damping = damping;
                     fc.enabled = true;
                 }

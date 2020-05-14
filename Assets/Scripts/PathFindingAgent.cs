@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Random = System.Random;
-using UnityEditor;
 
 public class PathFindingAgent : MonoBehaviour {
 	
@@ -22,9 +21,10 @@ public class PathFindingAgent : MonoBehaviour {
 		targets = GameObject.Find("Targets").transform;
 			astar = finderGameObject.GetComponent<Astar>();
 		 grid = finderGameObject.GetComponent<Grid>();
-		 
-		 target = targets.GetChild(new Random().Next(0, targets.childCount));
-		 // target = targets.GetChild(1);
+
+		 var index = name[1]; // second character in the name is plane id
+		 // target = targets.GetChild(new Random().Next(0, targets.childCount));
+		 target = targets.GetChild( (index)%targets.childCount);
 
 	}
 	public Vector3[] GetPath()
@@ -120,9 +120,7 @@ public class PathFindingAgent : MonoBehaviour {
 			Node s = grid.getNodeFromPos(transform.position);
 			Gizmos.DrawWireCube(s.worldPosition,new Vector3(nodeDiameter,nodeDiameter,nodeDiameter));
 		}
-        if (target != null)
-            Handles.Label(transform.position, name + " " + target.name);
 
     }
-	
+
 }

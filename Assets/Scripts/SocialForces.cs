@@ -6,6 +6,7 @@ using UnityEngine;
 public class SocialForces : MonoBehaviour
 {
     private Rigidbody rb;
+    private AIController m_AIController;
     private float perceptionRadius;
     private Dictionary<GameObject, Vector3> perceivedNeighbors = new Dictionary<GameObject, Vector3>();
     private float rayCastOffset = 10.0f;
@@ -16,13 +17,26 @@ public class SocialForces : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         perceptionRadius = GetComponent<SphereCollider>().radius;
+        m_AIController = GetComponent<AIController>();
     }
 
     private void FixedUpdate()
     {
-       if (perceivedNeighbors.Count != 0)
+        if (perceivedNeighbors.Count != 0)
+        {
             computeForce();
-         // rayCastForce();
+            // rayCastForce();
+            
+            // Using AI MoveTowards
+            // Vector3 turningDirection = Vector3.zero;
+            // foreach (var obj in perceivedNeighbors)
+            // {
+            //     turningDirection += transform.position - obj.Value;
+            // }
+            //
+            // m_AIController.MoveTowards((transform.position + turningDirection) * 0.01f);
+        }
+        
     }
 
     private void computeForce()
@@ -35,7 +49,7 @@ public class SocialForces : MonoBehaviour
             
             
         }
-        rb.AddForce(force * 10, ForceMode.Force);
+        rb.AddForce(force * 5, ForceMode.Force);
     }
 
     private Vector3 calculateWallForce(GameObject wall)

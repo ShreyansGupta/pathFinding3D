@@ -10,7 +10,7 @@ public class Grid : MonoBehaviour {
 	public Vector3 gridWorldSize;
 	public float nodeRadius;
 	
-	private Node[,,] _grid;
+	private static Node[,,] _grid;
 	public List<Node> path;
 	private float _nodeDiameter;
 	public int _gridSizeX, _gridSizeY, _gridSizeZ;
@@ -36,6 +36,7 @@ public class Grid : MonoBehaviour {
 		if (bake)
 		{
 			CreateGrid();
+			print(_grid);
 		}
 		bake = false;
 	}
@@ -170,15 +171,11 @@ public class Grid : MonoBehaviour {
 			}
 		}
 	}
-	public bool checkInWorld(Vector3 loc)
+	public bool CheckInWorld(Vector3 loc)
 	{
 		bool inWorld = ((loc.x < gridWorldSize.x / 2 && loc.x > -gridWorldSize.x / 2) &&
 			(loc.y < gridWorldSize.y && loc.y > 0) &&
 			(loc.z < gridWorldSize.z / 2 && loc.z > -gridWorldSize.z / 2));
-		if (inWorld)
-		{
-			print("Entered World, Can start path finding now");
-		}
 
 		return inWorld;
 

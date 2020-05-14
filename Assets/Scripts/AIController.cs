@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Aeroplane;
+using UnityEditor;
+
 
 public class AIController : MonoBehaviour
 {
@@ -15,11 +17,12 @@ public class AIController : MonoBehaviour
     [SerializeField] private float m_SpeedEffect = 0.01f;           // This increases the effect of the controls based on the plane's speed.
     [SerializeField] private float m_TakeoffHeight = 20;            // the AI will fly straight and only pitch upwards until reaching this height
     [SerializeField] private float distanceThreshold = 120.0f;
-    [SerializeField] private bool drawPath = false;
-
+    public bool drawPath = false;
+    public bool drawWireSphere = false;
+    
     private AeroplaneController m_Controller;
     private PathFindingAgent m_NavAgent;
-
+    
     private Vector3[] m_Path;
     private Rigidbody m_Rigidbody;
 
@@ -43,26 +46,19 @@ public class AIController : MonoBehaviour
         {
             // apply full throttle for takeoff
             m_Controller.Move(0,0,0, 1, false);
-            if (m_Controller.Altitude > m_TakeoffHeight && m_NavAgent.grid.checkInWorld(transform.position))
+            if (m_Controller.Altitude > m_TakeoffHeight) //&& m_NavAgent.grid.CheckInWorld(transform.position))
                 //&& m_NavAgent.grid.checkInWorld(transform.position))
             {
                 _takenOff = true;
                 // Get the path to follow using path follower
 
-                // m_Path = m_NavAgent.GetPath();
-                // if (m_Path.Length > 0)
-                // {
-                //     print("Path Found");
-                //     OnPathFound(m_Path, true);
-                // }
-                // else
-                //     print("No Path Found");
               PathRequestManager.RequestPath(transform.position + transform.forward * 50 + transform.up * 20, m_NavAgent.target.position, OnPathFound);
             }
         }
 
         // Clamp the speed to maxSpeed once the plane has taken off
         // Vector3.ClampMagnitude(m_Rigidbody.velocity, maxVelocity);
+        // StartCoroutine(SteerToAvoidCollisions());
 
     }
 
@@ -117,8 +113,8 @@ public class AIController : MonoBehaviour
             while ( (currTargetDist > distanceThreshold) && Vector3.Dot(transform.forward, (currTarget - transform.position).normalized) > 0.5 ) 
             {
                 
-                Debug.DrawRay(transform.position, transform.forward * 100, Color.blue);
-                Debug.DrawLine(transform.position, currTarget);
+                // Debug.DrawRay(transform.position, transform.forward * 100, Color.blue);
+                // Debug.DrawLine(transform.position, currTarget);
                 
                 _prevPointDistance = currTargetDist;
                 // using Lerp as an extra smoothening step
@@ -146,10 +142,9 @@ public class AIController : MonoBehaviour
 
         yield return null;
     }
-    
+ 
     #region PD_Controller
-
-    void MoveTowards(Vector3 targetPos)
+    public void MoveTowards(Vector3 targetPos)
     {
          Vector3 localTarget = transform.InverseTransformPoint(targetPos);
         float targetAngleYaw = Mathf.Atan2(localTarget.x, localTarget.z);
@@ -207,39 +202,40 @@ public class AIController : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        if (drawPath && m_Path != null)
-        {
-            for (int i = 0; i < m_Path.Length-1; i++)
-            {
-                Gizmos.color = Color.grey;
-                Gizmos.DrawWireSphere(m_Path[i], 2);
-                Gizmos.color = m_NavAgent.target.name.Equals("RedTarget") ? Color.red : Color.green;
-                Gizmos.DrawLine(m_Path[i], m_Path[i+1]);
-            }
-        }
-    }
+        Handles.color = Color.black;
+        Handles.Label(transform.position, name);
 
-    private void OnDrawGizmosSelected()
-    {
-        if (m_NavAgent != null && m_Path != null)
+        if (m_NavAgent != null)
         {
             var targetName = m_NavAgent.target.name;
-
-            for (int i = 0; i < m_Path.Length-1; i++)
+            
+            if (drawPath && m_Path != null)
             {
-                Gizmos.color = Color.grey;
-                Gizmos.DrawWireSphere(m_Path[i], 2);
-                 if (targetName.Equals("RedTarget")) 
-                     Gizmos.color = Color.red;
-                 else if(targetName.Equals("GreenTarget"))
-                     Gizmos.color = Color.green;
-                 else
-                     Gizmos.color = Color.blue;
-                 Gizmos.DrawLine(m_Path[i], m_Path[i+1]);
+                for (int i = 0; i < m_Path.Length - 1; i++)
+                {
+                    Gizmos.color = Color.grey;
+                    Gizmos.DrawWireSphere(m_Path[i], 2);
+                    Gizmos.color = Color.grey;
+                    Gizmos.DrawWireSphere(m_Path[i], 2);
+                    if (targetName.Equals("RedTarget"))
+                        Gizmos.color = Color.red;
+                    else if (targetName.Equals("GreenTarget"))
+                        Gizmos.color = Color.green;
+                    else
+                        Gizmos.color = Color.blue;
+                    Gizmos.DrawLine(m_Path[i], m_Path[i + 1]);
+                }
             }
-        }
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, 75f);
+            if (targetName.Equals("RedTarget")) 
+                Gizmos.color = Color.red;
+            else if(targetName.Equals("GreenTarget"))
+                Gizmos.color = Color.green;
+            else
+                Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, 30f);
+        }
     }
+
+   
 }
